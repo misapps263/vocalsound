@@ -1,0 +1,506 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>jQTouch &beta;</title>
+        <link rel="stylesheet" href="css/themes/css/vanilla.min.css" data-jqt-theme>
+				<link rel="stylesheet" href="css/animations.css" data-jqt-theme>
+
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+        <!-- Either, (1) Zepto:  Un-comment these 2 lines (order matters)  
+        <script src="lib/zepto/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="src/jqt.min.js" type="text/javascript" charset="utf-8"></script>
+        -->
+        <!-- Or,     (2) jQuery: Un-comment these 3 lines (order matters)  -->
+          <script src="js/jtouch/lib/jquery/jquery-1.7.min.js" type="application/x-javascript" charset="utf-8"></script>  
+          <script src="js/jtouch/src/jqt.min.js" type="text/javascript" charset="utf-8"></script>  
+          <script src="js/jtouch/src/jqtouch-jquery.min.js" type="application/x-javascript" charset="utf-8"></script> 
+
+        <script src="js/jtouch/extensions/jqt.themeswitcher.min.js" type="application/x-javascript" charset="utf-8"></script>
+        <script src="js/jtouch/extensions/jqt.actionsheet.min.js" type="application/x-javascript" charset="utf-8"></script>
+        <script src="js/jtouch/extensions/jqt.menusheet.min.js" type="application/x-javascript" charset="utf-8"></script>
+				
+			 
+			<script src="js/cordova.js" type="application/x-javascript" charset="utf-8"></script>
+
+
+			
+			
+			
+			
+			
+			
+			
+			<!--//////////////////////////////-->
+			<style type="text/css">
+			
+<!-- 
+body{background-image: url('../img/fondo.jpg');}
+
+@keyframes animatedBackground {
+	0% { background-position: 0 0; }
+	100% { background-position: -300px 0; }
+}
+@-moz-keyframes animatedBackground {
+	0% { background-position: 0 0; }
+	100% { background-position: -300px 0; }
+}
+@-webkit-keyframes animatedBackground {
+	0% { background-position: 0 0; }
+	100% { background-position: -300px 0; }
+}
+@-ms-keyframes animatedBackground {
+	0% { background-position: 0 0; }
+	100% { background-position: -300px 0; }
+}
+@-o-keyframes animatedBackground {
+	0% { background-position: 0 0; }
+	100% { background-position: -300px 0; }
+}
+
+.aaanimate-area { 
+	width: 100%; 
+	height: 100%; 
+	/*background-image: url(http://davidwalsh.name/demo/bg-clouds.png);*/
+	/*background-image: url(https://images.blogthings.com/thecolorfulpatterntest/pattern-1.png);*/
+	background-image: url('../img/fondo.jpg');
+	background-position: 0px 0px;
+
+	animation: animatedBackground 40s linear infinite;
+	-moz-animation: animatedBackground 40s linear infinite;
+	-webkit-animation: animatedBackground 40s linear infinite;
+	-ms-animation: animatedBackground 40s linear infinite;
+	-o-animation: animatedBackground 40s linear infinite;
+} 
+
+
+-->
+</style>
+			<!--/////////////////////////////-->
+			
+		
+			
+			
+			
+			
+        <script type="text/javascript" charset="utf-8">
+            var jQT = new $.jQT({
+                icon: 'jqtouch.png',
+                icon4: 'jqtouch4.png',
+                addGlossToIcon: false,
+                startupScreen: 'jqt_startup.png',
+                statusBar: 'black-translucent',
+                preloadImages: []
+            });
+
+            // Some sample Javascript functions:
+            $(function(){
+
+                // Show a swipe event on swipe test
+                $('#swipeme').swipe(function(evt, data) {
+                    var details = !data ? '': '<strong>' + data.direction + '/' + data.deltaX +':' + data.deltaY + '</strong>!';
+                    $(this).html('You swiped ' + details );
+                    $(this).parent().after('<li>swiped!</li>')
+                });
+
+                $('#tapme').tap(function(){
+                    $(this).parent().after('<li>tapped!</li>')
+                });
+
+                $('a[target="_blank"]').bind('click', function() {
+                    if (confirm('This link opens in a new window.')) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+
+                // Page animation callback events
+                $('#pageevents').
+                    bind('pageAnimationStart', function(e, info){ 
+                        $(this).find('.info').append('Started animating ' + info.direction + '&hellip;  And the link ' +
+                            'had this custom data: ' + $(this).data('referrer').data('custom') + '<br>');
+                    }).
+                    bind('pageAnimationEnd', function(e, info){
+                        $(this).find('.info').append('Finished animating ' + info.direction + '.<br><br>');
+
+                    });
+                
+                // Page animations end with AJAX callback event, example 1 (load remote HTML only first time)
+                $('#callback').bind('pageAnimationEnd', function(e, info){
+
+                    // Make sure the data hasn't already been loaded (we'll set 'loaded' to true a couple lines further down)
+                    if (!$(this).data('loaded')) {
+                        
+                        // Append a placeholder in case the remote HTML takes its sweet time making it back
+                        // Then, overwrite the "Loading" placeholder text with the remote HTML
+                        $(this).append($('<div>Loading</div>').load('ajax.html .info', function() {        
+                            // Set the 'loaded' var to true so we know not to reload
+                            // the HTML next time the #callback div animation ends
+                            $(this).parent().data('loaded', true);  
+                        }));
+                    }
+                });
+                // Orientation callback event
+                $('#jqt').bind('turn', function(e, data){
+                    $('#orient').html('Orientation: ' + data.orientation);
+                });
+                
+            });
+        </script>
+				 <!-- phonegap audio----> 
+		
+		<script type="text/javascript" charset="utf-8">
+// Wait for device API libraries to load
+//
+document.addEventListener("deviceready", onDeviceReady, false);
+// device APIs are available
+//
+function onDeviceReady() {
+playAudio("/android_asset/www/Clown-horn.mp3");// local con PHONEGP 4.2.0-0.23.0
+//playAudio("http://audio.ibeat.org/content/p1rj1s/p1rj1s_-_rockGuitar.mp3?); //remoto
+}
+// Audio player
+//
+var my_media = null;
+var mediaTimer = null;
+// Play audio
+//
+function playAudio(src) {
+// Create Media object from src
+my_media = new Media(src, onSuccess, onError);
+// Play audio
+my_media.play();
+// Update my_media position every second
+if (mediaTimer == null) {
+mediaTimer = setInterval(function() {
+// get my_media position
+my_media.getCurrentPosition(
+// success callback
+function(position) {
+if (position > -1) {
+setAudioPosition((position) + " sec");
+}
+},
+// error callback
+function(e) {
+console.log("Error getting pos=" + e);
+setAudioPosition("Error: " + e);
+}
+);
+}, 1000);
+}
+}
+// Pause audio
+//
+function pauseAudio() {
+if (my_media) {
+my_media.pause();
+}
+}
+// Stop audio
+//
+function stopAudio() {
+if (my_media) {
+my_media.stop();
+}
+clearInterval(mediaTimer);
+mediaTimer = null;
+}
+// onSuccess Callback
+//
+function onSuccess() {
+console.log("playAudio():Audio Success");
+}
+// onError Callback
+//
+function onError(error) {
+alert("code: " + error.code + "\n" +
+"message: " + error.message + "\n");
+}
+// Set audio position
+//
+function setAudioPosition(position) {
+document.getElementById("audio_position").innerHTML = position;
+}
+</script>
+	<script type="text/javascript">
+<!--
+
+ 
+var x;
+x=$(document);
+x.ready(inicializarEventos);
+
+
+
+
+function inicializarEventos()
+{	
+ 
+  var x;
+  x=$("#checkvocal");
+  x.bind('click',function(){check('true')	})
+	//x.click(function(){check('true')	})
+	var o;
+  o=$("#checkcon");
+  o.click(function(){check('false')	})
+ ponletra();
+}
+ function ponletra(){
+ $('#check').click(function(){ 
+ 
+ ///escogemos array
+ 
+ 
+ 
+       
+ 			var vocales=['a','e','i','o','u']		;										 
+ 			 var abecedario=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','a','e','i','o','u'];
+      var letrasarray= Math.floor((Math.random() * 2));
+			if(letrasarray>0){miletra='abecedario'}else{miletra='vocales'}
+			 var letra=miletra[Math.floor((Math.random() * miletra.length) + 1)]; 
+       $('#check').text(letra);
+       //mostramos el menu de botones	
+	$('#buttons').css('display','inline');
+	//ocultamos los mensajes	
+	$('.mensaje').css('display','none');
+			  })
+ }
+ 
+ function contador(){}
+ 
+function check(a)
+{
+     var x;	
+  	 var a;
+  	 var letra;
+  	 var isV;
+  	 var check;
+  	 var vocales;
+		 var vocales = ['','a','e','i','o','u'];
+  	 //var letra = 'a'; 
+		 
+	 check=$('#checkvocal').attr('data-type');
+	
+	
+	$('#check').text(letra);
+	isV=$('#check').text();
+	 
+  x=$("this");
+  x.css("color","#ff0000");
+  x.css("background-color","#ffff00");
+  x.css("font-family","Courier");
+	//x.text(isV);
+	
+//ocultamos el menu de botones	
+	$('#buttons').css('display','none');
+	
+   //myarray.push(isV);
+
+if(jQuery.inArray(isV, vocales)>=0) {
+    var z='true';
+} else {
+   // console.log('fuera del array'+jQuery.inArray(isV, vocales));
+	  var z='false';
+}
+if(z==a){
+//llamar funcion
+console.log('Correcto');
+correcto();
+}else{
+
+//llamar funcion
+console.log('INCorrecto');
+incorrecto();
+}
+
+}
+ 
+function incorrecto(){
+$('#check').html('<div class="mensaje">Ohh!!!:(z <div><small style="font-size:50%;">continuar</small></div>');
+$('#check').css('color','#FF0084');
+$('#check').removeClass('pulse');
+$('#check').addClass('tossing'); 
+$('#check').click(ponletra());
+}
+function correcto(){
+$('#check').html('<div class="mensaje">Bieeen!!! <div><small style="font-size:50%;">continuar</small></div>');
+$('#check').css('color','#2C539E');
+$('#check').css('text-shadow','white');
+$('#check').removeClass('tossing');
+$('#check').addClass('pulse');  
+$('#check').click(ponletra());
+}
+
+// -->
+</script>
+		 <!------>
+        <style type="text/css" media="screen">
+            #jqt.fullscreen #home .info {
+                display: none;
+            }
+            div#jqt #about {
+                padding: 100px 10px 40px;
+                text-shadow: rgba(0, 0, 0, 0.3) 0px -1px 0;
+                color: #999;
+                font-size: 13px;
+                text-align: center;
+                background: #161618;
+            }
+            div#jqt #about p {
+                margin-bottom: 8px;
+            }
+            div#jqt #about a {
+                color: #fff;
+                font-weight: bold;
+                text-decoration: none;
+            }
+						
+#jqt .toolbar{background:#B5E4F8;!important}
+						 
+        </style>
+    </head>
+    <body>
+        <div id="jqt" >
+            <div id="about" class="selectable" onclick="playAudio('/android_asset/www/../Clown-horn.mp3');">
+                <p><img src="jqtouch.png" /></p>
+                <p><strong>Adair </strong><br>Version 1.0 beta<br>
+                    <a href="http://www.davidkaneda.com">By Adair</a></p>
+                <p><em>creando <br> con HTML, CSS, and jQuery.</em></p>
+                <p>
+                    <a target="_blank" href="http://twitter.com/jqtouch">@jQTouch on Twitter</a>
+                </p>
+                <p><br><br><a href="#" class="whiteButton goback">Close</a></p>
+            </div>
+            
+            <div id="ui" class="animate-area">
+                <div class="toolbar"  >
+                    <h1>Animations</h1>
+                    <a class="  cube back" href="#"style=" color:rgba(255,255,255,.9);    display:inline;">Home</a>
+		    <a href="#marcador" class="cube whiteButton "  style=" color:rgba(0,0,0,.9); display:inline; float:right;" id=""> Marcador</a></li>
+							
+                </div>
+                <div  class="scroll" id=" ">
+                    
+                     
+                     
+ 
+                         <div style="background-color:rgba(255,255,255,0.3); ">
+												 
+												 <center>
+												 <p class="	floating" id="check"/ style="font-family:'Comic Sans MS';text-shadow: 5px 5px 5px #143afa; position:relative;font-size:80pt;filter: dropshadow(color=#143afa, offx=5, offy=5);padding:3pt;"> start<p id="display" style="margin:33pt;"></p></p>
+												 <div id="buttons">
+ 												 <span id="checkvocal" onclick="playAudio('/android_asset/www/Clown-horn.mp3');"><a href="#" class="whiteButton "  style=" color:rgba(0,0,0,.9);   display:inline;" >Vocal</a></span>
+											         <span id="checkcon"><a href="#" class="whiteButton"  style=" color:rgba(0,0,0,.9); display:inline;" onclick="playAudio('/android_asset/www/Clown-horn.mp3');"> Consonante</a></li></span>
+												</div> 
+												 
+											 </center>
+ 
+ 
+ 												 <!--
+                         <a href="#animdemo1" class="whiteButton flipleft"  style=" color:rgba(0,0,0,.9);   display:inline;" id="checkvocal">Vocal</a>
+												 <a href="#animdemo2" class="swap whiteButton"  style=" color:rgba(0,0,0,.9); display:inline;" id="checkcon"> Consonante</a></li>
+                        -->
+												
+												
+												 </div>
+                    
+										  
+                </div>
+								
+            </div>
+						
+					 
+						<!--------------------->
+            <div id="animdemo">
+                <div class="scroll">
+                    <div style="font-size: 1.5em; text-align: center; margin: 160px 0 90px; font-family: Marker felt;">
+                       WHT, eh?
+                    </div>
+                    <a style="margin-bottom: 120px;color:rgba(0,0,0,.9)" href="#" class="whiteButton goback">Volver</a>
+                </div>
+            </div>
+						 <div id="vocal" class="scroll animate-area">
+                <div class="scroll " style="height:100%;background: url('img/.jpg'); background-size:cover; background-repeat: no-repeat; background-position:center; ">
+                    <div style="font-size: 1.5em; text-align: center; margin: 160px 0 90px; font-family: Marker felt;" id="marcadorVocal">
+                      
+                    </div>
+                    <a style="margin-bottom: 120px;color:rgba(0,0,0,.9)" href="#ui" class="whiteButton goback">Volver</a>
+                </div>
+            </div>
+						 <div id="marcador" class="animate-area">
+                <div class="scroll  " style="height:100%;background: url(''); background-size:cover; background-repeat: no-repeat; background-position:center; ">
+                    <div style="font-size: 1.5em; text-align: center; margin: 160px 0 90px; font-family: Marker felt;" id="marcadorConsonante">
+                       Tu puntuacion<p id="displayMarcador"></p>
+                    </div>
+                    <a style="margin-bottom: 120px;color:rgba(0,0,0,.8)" href="#ui" class="grayButton goback">Volver</a>
+                </div>
+            </div>
+            
+						<!---------------------->
+						
+						
+             
+         
+       
+       
+            <div id="home" class="current animate-area" >
+                <div class="toolbar">
+                          <h1>toolbar</h1>
+                          <a class="button slideup" id="infoButton" href="#about">About</a>
+                 </div>
+                      <div  class=""style="height:100%;background:  url('img/intro.jpg'); background-size:cover; background-repeat: no-repeat;  background-position:center; ">
+      								<img src="iimg/render.jpg" style="width:100%;" alt="">
+											<center>
+                          <a href="#ui" class="cube whiteButton pulse" style="background:#47B9EF;width:113pt;height:20pt;" onclick="playAudio('/android_asset/www/Clown-horn.mp3');">JUGAR</a> </li>
+                      </center>     
+                              
+                           
+                     
+                    
+                </div>
+                <div class="info">
+                    <p>Señala las letras <br>segun sean vocal o consonante.</p>
+                </div>
+            </div>
+        <div id="ui" class="">
+                <div class="toolbar">
+                    <h1>otros</h1>
+                    <a href="#" class="back">Home</a>
+                </div>
+                <div class="scroll">
+                     
+                    <h2>Most Popular</h2>
+                     
+                </div>
+            </div>
+             
+						<!-------mmmmmmmmmmmmm------------------>
+						<div class="scroll" id="ui">
+                   
+                    <h2>External Links</h2>
+                    <ul class="rounded">
+                        <li class="forward"><a target="_blank" href="http://www.jqtouch.com/">Homepage</a></li>
+                        <li class="forward"><a target="_blank" href="http://twitter.com/#!/jqtouch">Twitter</a></li>
+                        <li class="forward"><a target="_blank" href="http://github.com/senchalabs/jQTouch">GitHub</a></li>
+                    </ul>
+                    <ul class="individual">
+                        <li><a target="_blank" href="http://twitter.com/davidkaneda">@davidkaneda</a></li>
+                        <li><a target="_blank" href="http://twitter.com/beedesk">@beedesk</a></li>
+                    </ul>
+                </div>
+          
+						<!-------------->
+         
+        </div>
+    </body>
+    <script>
+      if (window.navigator.standalone) {
+        $("meta[name='apple-mobile-web-app-status-bar-style']").remove();
+      }
+    </script>
+   
+</html>
