@@ -23,7 +23,7 @@
         <script src="js/jtouch/extensions/jqt.menusheet.min.js" type="application/x-javascript" charset="utf-8"></script>
 				
 			 
-			<script src="js/cordova.js" type="application/x-javascript" charset="utf-8"></script>
+			<script src="cordova.js" type="application/x-javascript" charset="utf-8"></script>
 
 
 			
@@ -80,77 +80,7 @@ body{background-image: url('../img/fondo.jpg');}
 </style>
 			<!--/////////////////////////////-->
 			
-		
-			
-			
-			
-			
-        <script type="text/javascript" charset="utf-8">
-            var jQT = new $.jQT({
-                icon: 'jqtouch.png',
-                icon4: 'jqtouch4.png',
-                addGlossToIcon: false,
-                startupScreen: 'jqt_startup.png',
-                statusBar: 'black-translucent',
-                preloadImages: []
-            });
-
-            // Some sample Javascript functions:
-            $(function(){
-
-                // Show a swipe event on swipe test
-                $('#swipeme').swipe(function(evt, data) {
-                    var details = !data ? '': '<strong>' + data.direction + '/' + data.deltaX +':' + data.deltaY + '</strong>!';
-                    $(this).html('You swiped ' + details );
-                    $(this).parent().after('<li>swiped!</li>')
-                });
-
-                $('#tapme').tap(function(){
-                    $(this).parent().after('<li>tapped!</li>')
-                });
-
-                $('a[target="_blank"]').bind('click', function() {
-                    if (confirm('This link opens in a new window.')) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                });
-
-                // Page animation callback events
-                $('#pageevents').
-                    bind('pageAnimationStart', function(e, info){ 
-                        $(this).find('.info').append('Started animating ' + info.direction + '&hellip;  And the link ' +
-                            'had this custom data: ' + $(this).data('referrer').data('custom') + '<br>');
-                    }).
-                    bind('pageAnimationEnd', function(e, info){
-                        $(this).find('.info').append('Finished animating ' + info.direction + '.<br><br>');
-
-                    });
-                
-                // Page animations end with AJAX callback event, example 1 (load remote HTML only first time)
-                $('#callback').bind('pageAnimationEnd', function(e, info){
-
-                    // Make sure the data hasn't already been loaded (we'll set 'loaded' to true a couple lines further down)
-                    if (!$(this).data('loaded')) {
-                        
-                        // Append a placeholder in case the remote HTML takes its sweet time making it back
-                        // Then, overwrite the "Loading" placeholder text with the remote HTML
-                        $(this).append($('<div>Loading</div>').load('ajax.html .info', function() {        
-                            // Set the 'loaded' var to true so we know not to reload
-                            // the HTML next time the #callback div animation ends
-                            $(this).parent().data('loaded', true);  
-                        }));
-                    }
-                });
-                // Orientation callback event
-                $('#jqt').bind('turn', function(e, data){
-                    $('#orient').html('Orientation: ' + data.orientation);
-                });
-                
-            });
-        </script>
-				 <!-- phonegap audio----> 
+			 <!-- phonegap audio----> 
 		
 		<script type="text/javascript" charset="utf-8">
 // Wait for device API libraries to load
@@ -226,6 +156,76 @@ function setAudioPosition(position) {
 document.getElementById("audio_position").innerHTML = position;
 }
 </script>
+			
+			
+			
+			
+        <script type="text/javascript" charset="utf-8">
+            var jQT = new $.jQT({
+                icon: 'jqtouch.png',
+                icon4: 'jqtouch4.png',
+                addGlossToIcon: false,
+                startupScreen: 'jqt_startup.png',
+                statusBar: 'black-translucent',
+                preloadImages: []
+            });
+
+            // Some sample Javascript functions:
+            $(function(){
+
+                // Show a swipe event on swipe test
+                $('#swipeme').swipe(function(evt, data) {
+                    var details = !data ? '': '<strong>' + data.direction + '/' + data.deltaX +':' + data.deltaY + '</strong>!';
+                    $(this).html('You swiped ' + details );
+                    $(this).parent().after('<li>swiped!</li>')
+                });
+
+                $('#tapme').tap(function(){
+                    $(this).parent().after('<li>tapped!</li>')
+                });
+
+                $('a[target="_blank"]').bind('click', function() {
+                    if (confirm('This link opens in a new window.')) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+
+                // Page animation callback events
+                $('#pageevents').
+                    bind('pageAnimationStart', function(e, info){ 
+                        $(this).find('.info').append('Started animating ' + info.direction + '&hellip;  And the link ' +
+                            'had this custom data: ' + $(this).data('referrer').data('custom') + '<br>');
+                    }).
+                    bind('pageAnimationEnd', function(e, info){
+                        $(this).find('.info').append('Finished animating ' + info.direction + '.<br><br>');
+
+                    });
+                
+                // Page animations end with AJAX callback event, example 1 (load remote HTML only first time)
+                $('#callback').bind('pageAnimationEnd', function(e, info){
+
+                    // Make sure the data hasn't already been loaded (we'll set 'loaded' to true a couple lines further down)
+                    if (!$(this).data('loaded')) {
+                        
+                        // Append a placeholder in case the remote HTML takes its sweet time making it back
+                        // Then, overwrite the "Loading" placeholder text with the remote HTML
+                        $(this).append($('<div>Loading</div>').load('ajax.html .info', function() {        
+                            // Set the 'loaded' var to true so we know not to reload
+                            // the HTML next time the #callback div animation ends
+                            $(this).parent().data('loaded', true);  
+                        }));
+                    }
+                });
+                // Orientation callback event
+                $('#jqt').bind('turn', function(e, data){
+                    $('#orient').html('Orientation: ' + data.orientation);
+                });
+                
+            });
+        </script>
+			
 	<script type="text/javascript">
 <!--
 
@@ -393,7 +393,10 @@ $('#check').click(ponletra());
 												 <center>
 												 <p class="	floating" id="check"/ style="font-family:'Comic Sans MS';text-shadow: 5px 5px 5px #143afa; position:relative;font-size:80pt;filter: dropshadow(color=#143afa, offx=5, offy=5);padding:3pt;"> start<p id="display" style="margin:33pt;"></p></p>
 												 <div id="buttons">
- 												 <span id="checkvocal" onclick="playAudio('/android_asset/www/Clown-horn.mp3');"><a href="#" class="whiteButton "  style=" color:rgba(0,0,0,.9);   display:inline;" >Vocal</a></span>
+												 	 												 <span id="checkvocal" onclick="playAudio('/android_asset/www/Clown-horn.mp3');"class="whiteButton "  style=" color:rgba(0,0,0,.9);   display:inline;">Vocal</span>
+ 												 <span id="" onclick="alert('click')"class="whiteButton "  style=" color:rgba(0,0,0,.9);   display:inline;">Vocal</span>
+
+ 												 <span id="checkvocal" onclick="playAudio('/android_asset/www/Clown-horn.mp3');"class="whiteButton "  style=" color:rgba(0,0,0,.9);   display:inline;">Vocal</span>
 											         <span id="checkcon"><a href="#" class="whiteButton"  style=" color:rgba(0,0,0,.9); display:inline;" onclick="playAudio('/android_asset/www/Clown-horn.mp3');"> Consonante</a></li></span>
 												</div> 
 												 
